@@ -16,8 +16,9 @@ def compute_chagas_weights(max_weight=np.inf):
     classe_1 = chagas_data[(chagas_data['Obito_MS'] == 1) & (chagas_data['Time'] < 5)]
     classe_0 = chagas_data[(chagas_data['Obito_MS'] == 0) | (chagas_data['Time'] == 5)]
 
-    filtered_data = pd.concat([classe_1, classe_0])
-    labels = np.where(filtered_data['Obito_MS'] == 1, 1, 0)
+    filtered_data = pd.concat([classe_1, classe_0]).reset_index(drop=True)
+
+    labels = ((filtered_data['Obito_MS'] == 1) & (filtered_data['Time'] < 5)).astype(int)
 
     class_counts = np.bincount(labels)
     weights = 1 / class_counts[labels]
